@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Alert, FlatList } from 'react-native';
+import { StyleSheet, View, Alert, FlatList } from 'react-native';
 import { useState } from 'react';
 import Title from '../components/ui/Title';
 import NumberContainer from '../components/game/NumberContainer';
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
         paddingTop: 46,
         paddingHorizontal: 24,
         paddingBottom: 24,
+        alignItems: 'center',
     },
     InstructionText: {
         marginBottom: 12,

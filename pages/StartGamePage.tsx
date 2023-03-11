@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { StyleSheet, View, TextInput, Text, Alert } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    TextInput,
+    Alert,
+    useWindowDimensions,
+    KeyboardAvoidingView,
+    ScrollView,
+} from 'react-native';
 import PrimaryButton from '../components/ui/PrimaryButton';
 import Colors from '../constants/colors';
 import Title from '../components/ui/Title';
@@ -12,6 +20,8 @@ type Props = {
 
 const StartGamePage: React.FC<Props> = ({ onPickNumber }) => {
     const [enteredNumber, setEnteredNumber] = useState<string>('');
+
+    const { width, height } = useWindowDimensions();
 
     const numberInputHandler = (enteredText: string) => {
         setEnteredNumber(enteredText);
@@ -41,41 +51,60 @@ const StartGamePage: React.FC<Props> = ({ onPickNumber }) => {
         }
     };
 
+    const marginTopDistance = height < 380 ? 30 : 100;
+
     return (
-        <View style={styles.rooContainer}>
-            <Title>Guess my Number</Title>
-            <Card>
-                <InstructionText>Enter a Number</InstructionText>
-                <TextInput
-                    style={styles.numberInput}
-                    maxLength={2}
-                    keyboardType="number-pad"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    value={enteredNumber}
-                    onChangeText={numberInputHandler}
-                />
-                <View style={styles.buttonsContainer}>
-                    <View style={styles.buttonContainer}>
-                        <PrimaryButton onPress={resetInputHandler}>
-                            Reset
-                        </PrimaryButton>
-                    </View>
-                    <View style={styles.buttonContainer}>
-                        <PrimaryButton onPress={confirmInputHandler}>
-                            Confirm
-                        </PrimaryButton>
-                    </View>
+        <ScrollView style={styles.page}>
+            <KeyboardAvoidingView style={styles.page} behavior="position">
+                <View
+                    style={[
+                        styles.rooContainer,
+                        { marginTop: marginTopDistance },
+                    ]}
+                >
+                    <Title>Guess my Number</Title>
+                    <Card>
+                        <InstructionText>Enter a Number</InstructionText>
+                        <TextInput
+                            style={styles.numberInput}
+                            maxLength={2}
+                            keyboardType="number-pad"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            value={enteredNumber}
+                            onChangeText={numberInputHandler}
+                        />
+                        <View style={styles.buttonsContainer}>
+                            <View style={styles.buttonContainer}>
+                                <PrimaryButton onPress={resetInputHandler}>
+                                    Reset
+                                </PrimaryButton>
+                            </View>
+                            <View style={styles.buttonContainer}>
+                                <PrimaryButton onPress={confirmInputHandler}>
+                                    Confirm
+                                </PrimaryButton>
+                            </View>
+                        </View>
+                    </Card>
                 </View>
-            </Card>
-        </View>
+            </KeyboardAvoidingView>
+        </ScrollView>
     );
 };
 
+// we can use this as this is only executed once
+// when that happens the dynamic values base on this are locked in on first run
+// we need a feature that runs in a component. Enter useWindowDimentions from react-native
+// const deviceHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
+    page: {
+        flex: 1,
+    },
     rooContainer: {
         flex: 1,
-        marginTop: 100,
+        // marginTop: deviceHeight < 380 ? 30 : 100, // We will set this in component so it is recauculated on each refresh
         alignItems: 'center',
     },
     numberInput: {

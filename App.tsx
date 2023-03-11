@@ -2,11 +2,13 @@ import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import StartGamePage from './pages/StartGamePage';
 import GamePage from './pages/GamePage';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Colors from './constants/colors';
 import GameOverPage from './pages/GameOverPage';
 import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
 
 const App: React.FC = () => {
     const [userNumber, setUserNumber] = useState<number | null | undefined>();
@@ -19,7 +21,19 @@ const App: React.FC = () => {
         'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
     });
 
-    if (!fontsLoaded) return <AppLoading />;
+    useEffect(() => {
+        if (fontsLoaded) setAppIsReady(true);
+    }, [fontsLoaded]);
+
+    const onLayoutRootView = useCallback(async () => {
+        if (appIsReady) {
+            await SplashScreen.hideAsync();
+        }
+    }, [appIsReady]);
+
+    if (!appIsReady) {
+        return null;
+    }
 
     const gameOverHandler = (gameOver: boolean, numRounds: number) => {
         setRounds(numRounds);
@@ -57,6 +71,7 @@ const App: React.FC = () => {
         <LinearGradient
             colors={[Colors.primary700, Colors.accent500]}
             style={styles.appContainer}
+            onLayout={onLayoutRootView}
         >
             <ImageBackground
                 source={require('./assets/images/background.png')}
