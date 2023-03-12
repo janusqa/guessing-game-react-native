@@ -1,4 +1,4 @@
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, Platform } from 'react-native';
 
 type Props = {
     children: React.ReactNode;
@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: 'white',
         textAlign: 'center',
-        borderWidth: 2,
+        // borderWidth: Platform.OS == 'ios' ? 0 : 2, // use Platform API to make platform specific tweaks. like removeing border just for ios
+        borderWidth: Platform.select({ ios: 0, android: 2 }), // another way to use Platform API
         borderColor: 'white',
         padding: 12,
         maxWidth: '80%',

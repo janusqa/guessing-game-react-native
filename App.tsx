@@ -7,6 +7,7 @@ import Colors from './constants/colors';
 import GameOverPage from './pages/GameOverPage';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -68,20 +69,25 @@ const App: React.FC = () => {
         );
 
     return (
-        <LinearGradient
-            colors={[Colors.primary700, Colors.accent500]}
-            style={styles.appContainer}
-            onLayout={onLayoutRootView}
-        >
-            <ImageBackground
-                source={require('./assets/images/background.png')}
-                resizeMode="cover"
+        <>
+            <StatusBar style="light" />
+            <LinearGradient
+                colors={[Colors.primary700, Colors.accent500]}
                 style={styles.appContainer}
-                imageStyle={styles.backgroundImage}
+                onLayout={onLayoutRootView}
             >
-                <SafeAreaView style={styles.appContainer}>{page}</SafeAreaView>
-            </ImageBackground>
-        </LinearGradient>
+                <ImageBackground
+                    source={require('./assets/images/background.png')}
+                    resizeMode="cover"
+                    style={styles.appContainer}
+                    imageStyle={styles.backgroundImage}
+                >
+                    <SafeAreaView style={styles.appContainer}>
+                        {page}
+                    </SafeAreaView>
+                </ImageBackground>
+            </LinearGradient>
+        </>
     );
 };
 

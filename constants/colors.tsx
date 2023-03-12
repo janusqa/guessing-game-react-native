@@ -1,9 +1,12 @@
-const Colors = {
-    primary500: '#72063c',
-    primary600: '#640233',
-    primary700: '#4e0329',
-    primary800: '#3b021f',
-    accent500: '#ddb52f',
-};
+// example of splitting platform specific code into their seperate files
+// we give each file their platform name.
+import { Platform } from 'react-native';
 
-export default Colors;
+import Colors from './colors';
+
+const PlatformSpecificColors = Platform.select({
+    ios: () => require('./colors.ios').default,
+    android: () => require('./colors.android').default,
+})();
+
+export default PlatformSpecificColors || Colors;
